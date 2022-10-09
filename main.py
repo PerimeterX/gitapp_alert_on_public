@@ -7,6 +7,7 @@ import logging
 import config
 from cryptography.hazmat.backends import default_backend
 import jwt
+import sys
 
 def get_jwt():
     cert_str = open(config.get_config_obj()['key_file'], 'r').read()
@@ -56,22 +57,30 @@ def get_access_token(jwt, access_tokens_url):
 
 def job():
     jwt = get_jwt()
-    logging.info(jwt)
+    logging.info("Got JWT token")
     installs = get_installations(jwt)
     for install in installs:
         logging.info("Running for install {}".format(install['org']))
         install_token = get_access_token(jwt, install['access_tokens_url'])
-        logging.info(install_token)
+        logging.info("Got installation access token")
         conf = config.get_info_for_org(install['org'])
-        print(conf)
+        logging.info("Using config: {}, {}".format(install['org'], conf['slackwebhook']))
         track.run(install['org'], install_token, conf['slackwebhook'])
 
-def main():
+def main(argv):
+    schedule = True
+    if (len(argv) == 2):
+        if (argv[1] == "once"):
+            schedule = False
+
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
     job()
+    if (not schedule):
+        return
+    
     schedule.every(30).minutes.do(job)
 
     while 1:
@@ -79,4 +88,4 @@ def main():
         time.sleep(10)
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)

@@ -134,7 +134,7 @@ def scan_repos_for_user(user_data):
 
 def scan_users_directory(organization):
     results = []
-    directory = '{}/users'.format(organization)
+    directory = 'temp/{}/users'.format(organization)
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         if os.path.isfile(f):
@@ -169,7 +169,6 @@ def thread_download_user(filepath, repos_url, index, total):
     f = open(filepath, "w")
     f.write(json.dumps(json.loads(r.text), indent=4))
     f.close
-    #print("Downloaded {} out of {}".format(index, total))
     sema.release()
 
 def send_notifications_to_slack(notifications, webhookurl):
@@ -183,9 +182,9 @@ def send_notifications_to_slack(notifications, webhookurl):
                     "text": "New public repo found on git user *{}* <{}|{}> ({} days old)".format(item['name'], item['repo_url'], repo_name, item['days_old'])
                 }}]
             }
-        print(payload)
         r = requests.post(webhookurl, data=json.dumps(payload))
-        print(r.status_code)
+        if (r.status_code != 200):
+            raise Exception("Error while sending slack notification: {}".format(r.text))
 
 def add_notifications_to_db(organization, notifications):
     myclient = pymongo.MongoClient(config.get_mongo_connection_string())
@@ -231,10 +230,12 @@ def run(organization, auth_token, slackwebhook):
     logging.info("Downloading {} users".format(len(users)))
     download_users_list(organization, users)
     notifications = (scan_users_directory(organization))
-    logging.info("sending {} notifications".format(len(notifications)))
+    logging.info("Found {} notifications".format(len(notifications)))
     if slackwebhook is not None:
+        logging.info("Sending to slack webhook")
         send_notifications_to_slack(notifications, slackwebhook)
     if config.get_mongo_state():
+        logging.info("Sending to mongo collection")
         add_notifications_to_db(organization, notifications)
     
 def main(argv):
