@@ -231,6 +231,9 @@ def run(organization, auth_token, slackwebhook):
     download_users_list(organization, users)
     notifications = (scan_users_directory(organization))
     logging.info("Found {} notifications".format(len(notifications)))
+    if (len(notifications) == 0):
+        return
+        
     if slackwebhook is not None:
         logging.info("Sending to slack webhook")
         send_notifications_to_slack(notifications, slackwebhook)
