@@ -12,7 +12,7 @@ headers = {
     'Accept': 'application/vnd.github.v3+json',
     'Authorization': 'Bearer {token}'
 }
-MINIMUM_DAYS = 100
+MINIMUM_DAYS = 7
 
 def get_outside_collabs(organization):
     baseurl ="https://api.github.com/orgs/{}/outside_collaborators".format(organization)
