@@ -17,6 +17,22 @@ A service for finding newly created public repositories for GitHub users who are
 pip install -r requirements.txt
 ```
 
+## Config File
+
+```JSON
+{
+    "key_file": "./conf/private-key.pem",
+    "github_app_id": "1111111",
+    "installs": [
+        {
+            "org": "ORG_NAME",
+            "slack_web_hook": "https://hooks.slack.com/services/XXXXXXXXXX/XXXXXXXXXX/XXXXXXXXXX"
+        }],
+    "use_mongo": false,
+    "mongodb_conn": "mongodb://.......", // relevant only if use_mongo is true, can be removed otherwise
+    "mongodb_db": "DB name" // relevant only if use_mongo is true, can be removed otherwise
+}
+```
 
 ## Test
 

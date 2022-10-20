@@ -7,7 +7,6 @@
             "slack_web_hook": "https://hooks.slack.com/services/XXXXXXXXXX/XXXXXXXXXX/XXXXXXXXXX"
         }],
     "use_mongo": false,
-    // if use_mongo is true, then set the next variable
     "mongodb_conn": "mongodb://.......",
     "mongodb_db": "DB name"
 }
