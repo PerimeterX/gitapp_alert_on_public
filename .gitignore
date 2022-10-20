@@ -132,3 +132,5 @@ dmypy.json
 config.json
 *.pem
 temp/
+
+.DS_Store
