@@ -1,6 +1,6 @@
 # gitapp_alert_on_public
 
-A service for finding newly created public repositories for GitHub users who are part of a GitHub organization.
+A service for finding and alerting on newly created public repositories for GitHub users who are part of a GitHub organization.
 
 ## Prepare Things
 
