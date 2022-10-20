@@ -30,9 +30,7 @@ def get_user_list(organization, headers):
     baseurl ="https://api.github.com/orgs/{}/members".format(organization)
     users = []
     i = 1
-    logging.info(headers)
     while True:
-        logging.info(headers)
         r = requests.get("{}?per_page=100&page={}".format(baseurl, i), headers=headers)
         if (r.status_code != 200):
             raise Exception(r.text)
