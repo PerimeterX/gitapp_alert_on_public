@@ -17,7 +17,7 @@ A service for finding and alerting on newly created public repositories for GitH
 pip install -r requirements.txt
 ```
 
-## Config File
+### Config File
 
 ```JSON
 {
