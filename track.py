@@ -8,13 +8,9 @@ import sys
 import pymongo
 import config
 
-headers = {
-    'Accept': 'application/vnd.github.v3+json',
-    'Authorization': 'Bearer {token}'
-}
 MINIMUM_DAYS = 7
 
-def get_outside_collabs(organization):
+def get_outside_collabs(organization, headers):
     baseurl ="https://api.github.com/orgs/{}/outside_collaborators".format(organization)
     users = []
     i = 1
@@ -30,11 +26,13 @@ def get_outside_collabs(organization):
         i += 1
     return users
     
-def get_user_list(organization):
+def get_user_list(organization, headers):
     baseurl ="https://api.github.com/orgs/{}/members".format(organization)
     users = []
     i = 1
+    logging.info(headers)
     while True:
+        logging.info(headers)
         r = requests.get("{}?per_page=100&page={}".format(baseurl, i), headers=headers)
         if (r.status_code != 200):
             raise Exception(r.text)
@@ -46,7 +44,7 @@ def get_user_list(organization):
         i += 1
     return users
 
-def run_gquery(query):
+def run_gquery(query, headers):
     request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=headers)
     if request.status_code == 200:
         return request.json()
@@ -144,13 +142,13 @@ def scan_users_directory(organization):
                 results += scan_repos_for_user(data)
     return results
 
-def download_users_list(organization, users):
+def download_users_list(organization, users, headers):
     threads = list()
     total = len(users)
     index = 0
     for user in users:
         file = "temp/{}/users/{}.json".format(organization, user['login'])
-        x = threading.Thread(target=thread_download_user, args=(file, user['repos_url'],index,total,))
+        x = threading.Thread(target=thread_download_user, args=(file, user['repos_url'],index,total,headers,))
         threads.append(x)
         x.start()
         index += 1
@@ -161,7 +159,7 @@ def download_users_list(organization, users):
 maxthreads = 5
 sema = threading.Semaphore(value=maxthreads)
 
-def thread_download_user(filepath, repos_url, index, total):
+def thread_download_user(filepath, repos_url, index, total, headers):
     sema.acquire()
     r = requests.get(repos_url, headers=headers)
     if (r.status_code != 200):
@@ -216,6 +214,10 @@ def run(organization, auth_token, slackwebhook):
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
+    headers = {
+        'Accept': 'application/vnd.github.v3+json',
+        'Authorization': 'Bearer {token}'
+    }
     headers['Authorization'] = headers['Authorization'].format(token=auth_token)
 
     dirs = "temp/{}/users/".format(organization)
@@ -226,9 +228,9 @@ def run(organization, auth_token, slackwebhook):
         os.makedirs("temp/{}".format(organization))
         os.makedirs("temp/{}/users/".format(organization))
     
-    users = get_user_list(organization)
+    users = get_user_list(organization, headers)
     logging.info("Downloading {} users".format(len(users)))
-    download_users_list(organization, users)
+    download_users_list(organization, users, headers)
     notifications = (scan_users_directory(organization))
     logging.info("Found {} notifications".format(len(notifications)))
     if (len(notifications) == 0):

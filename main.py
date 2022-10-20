@@ -68,17 +68,17 @@ def job():
         track.run(install['org'], install_token, conf['slackwebhook'])
 
 def main(argv):
-    schedule = True
+    to_schedule = True
     if (len(argv) == 2):
         if (argv[1] == "once"):
-            schedule = False
+            to_schedule = False
 
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
     job()
-    if (not schedule):
+    if (not to_schedule):
         return
     
     schedule.every(30).minutes.do(job)

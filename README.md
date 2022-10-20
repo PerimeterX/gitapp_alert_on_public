@@ -5,7 +5,7 @@ A service for finding newly created public repositories for GitHub users who are
 ## Prepare Things
 
 1. Create and install a GitHub application to your organization.
-    1. The GitHub application requires is _Organization permissions > Members (Read-Only)_
+    1. The GitHub application requires only one permission: _Organization permissions > Members (Read-Only)_.
     2. Download the private PEM file needed for JWT token creations.
 2. Update the [config.json](config-sample.json) file (see sample file) with the PEM file location and installation ID.
 3. For a single instance on a single organization, add to [config.json](config-sample.json) the GitHub organization and a slack webhook for notifications.
