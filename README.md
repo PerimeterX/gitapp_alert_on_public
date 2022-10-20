@@ -33,3 +33,10 @@ The following command will run forever, scanning repos immediatly, followed by a
 ```Shell
 python main.py
 ```
+
+### Docker Usage
+
+```Shell
+docker build --tag gitapp .
+docker run -d gitapp
+```
