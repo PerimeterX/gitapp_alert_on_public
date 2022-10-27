@@ -1,6 +1,15 @@
-# gitapp_alert_on_public
+# Alert on Public Repos
 
-A service for finding and alerting on newly created public repositories for GitHub users who are part of a GitHub organization.
+[![GitHub issues](https://img.shields.io/github/issues/PerimeterX/gitapp_alert_on_public)](https://github.com/PerimeterX/gitapp_alert_on_public/issues)
+[![GitHub forks](https://img.shields.io/github/forks/PerimeterX/gitapp_alert_on_public)](https://github.com/PerimeterX/gitapp_alert_on_public/network)
+[![GitHub stars](https://img.shields.io/github/stars/PerimeterX/gitapp_alert_on_public)](https://github.com/PerimeterX/gitapp_alert_on_public/stargazers)
+[![Latest Release](https://img.shields.io/github/v/release/perimeterx/gitapp_alert_on_public)](https://github.com/PerimeterX/gitapp_alert_on_public/releases)
+[![GitHub license](https://img.shields.io/github/license/PerimeterX/gitapp_alert_on_public)](https://github.com/PerimeterX/gitapp_alert_on_public/blob/main/LICENSE)
+![Top Languages](https://img.shields.io/github/languages/top/perimeterx/gitapp_alert_on_public)
+[![Twitter](https://img.shields.io/twitter/url?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2FPerimeterX%2Fgitapp_alert_on_public)
+
+
+A github application for finding and alerting on newly created public repositories for GitHub users who are part of a GitHub organization.
 
 ## Prepare Things
 
