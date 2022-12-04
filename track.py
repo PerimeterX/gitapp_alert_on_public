@@ -9,6 +9,7 @@ import pymongo
 import config
 
 MINIMUM_DAYS = 7
+alerted_repos = []
 
 def get_outside_collabs(organization, headers):
     baseurl ="https://api.github.com/orgs/{}/outside_collaborators".format(organization)
@@ -116,10 +117,16 @@ def scan_repos_for_user(user_data):
         # if forked, we don't care
         if (True == repo['fork']):
             continue
-        # if over 14 days old, we don't care
+
+        # if over MINIMUM_DAYS days old (or more than once), we don't care
         created_at = datetime.strptime(repo['created_at'], "%Y-%m-%dT%H:%M:%SZ")
         delta = datetime.now()-created_at
+        
         if (delta.days <= MINIMUM_DAYS):
+            if (repo['html_url'] in alerted_repos):
+                continue
+            alerted_repos.append(repo['html_url'])
+
             finding = { 
                 'name': repo['owner']['login'],
                 'repo_url': repo['html_url'],
