@@ -1,8 +1,0 @@
-query BlogPost {
-  blog(blogId: 5) {
-    title
-    tags
-  }
-}
-
-
