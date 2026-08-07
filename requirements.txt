@@ -1,5 +1,9 @@
-cryptography==39.0.1
-PyJWT==2.5.0
-pymongo==4.2.0
-requests==2.25.1
+--extra-index-url https://pypi.aikido.io/4c07129e21d8fb0a828
+cryptography==49.0.0
+PyJWT==2.13.0
+pymongo==4.6.3
+requests==2.34.0
 schedule==1.1.0
+
+urllib3==1.26.20+aikido.3
+idna==2.10+aikido.4
