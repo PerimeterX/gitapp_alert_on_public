@@ -141,7 +141,11 @@ def scan_users_directory(organization):
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         if os.path.isfile(f):
-            with open(f, 'r') as file:
+            base_real = os.path.realpath(directory)
+            target_real = os.path.realpath(f)
+            if os.path.commonpath([base_real, target_real]) != base_real:
+                raise Exception('Invalid file path')
+            with open(target_real, 'r') as file:
                 data = json.loads(file.read())
             if (len(data) > 0):
                 results += scan_repos_for_user(data)
