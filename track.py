@@ -169,7 +169,11 @@ def thread_download_user(filepath, repos_url, index, total, headers):
     r = requests.get(repos_url, headers=headers)
     if (r.status_code != 200):
         raise Exception(r.text)
-    f = open(filepath, "w")
+    base_real = os.path.realpath("temp")
+    target_real = os.path.realpath(filepath)
+    if os.path.commonpath([base_real, target_real]) != base_real:
+        raise Exception("Invalid file path")
+    f = open(target_real, "w")
     f.write(json.dumps(json.loads(r.text), indent=4))
     f.close
     sema.release()
